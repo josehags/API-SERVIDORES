@@ -1,7 +1,7 @@
-import "reflect-metadata";
+import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { Servidor } from '../models/Servidor';
-import { CreateServidores1656694737087 } from "./migrations/1656694737087-CreateServidores";
+import { CreateServidores1656694737087 } from './migrations/1656694737087-CreateServidores';
 
 export const APPDataSource = new DataSource({
   type: 'postgres',

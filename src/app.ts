@@ -1,11 +1,9 @@
-import express, { NextFunction, Request, Response } from "express";
+import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
-import bodyParser from "body-parser"
+import bodyParser from 'body-parser';
 import { pagination } from 'typeorm-pagination';
-import { router } from "./routes/routes";
-import { AppError } from "./errors/AppError";
-
-
+import { router } from './routes/routes';
+import { AppError } from './errors/AppError';
 
 const app = express();
 
@@ -27,15 +25,15 @@ app.use(
   (err: Error, request: Request, response: Response, _next: NextFunction) => {
     if (err instanceof AppError) {
       return response.status(err.statusCode).json({
-        message: err.message
+        message: err.message,
       });
     }
 
     return response.status(500).json({
-      status: "Error",
+      status: 'Error',
       message: `Internal server error ${err.message}`,
     });
-  }
+  },
 );
 
 export { app };
