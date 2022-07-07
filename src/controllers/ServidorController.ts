@@ -1,12 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
 import { Servidor } from '../models/Servidor';
+import { validate } from '../Utils/validate';
 import { APPDataSource } from '../database/data-source';
 import * as yup from 'yup';
-import { AppError } from '../errors/AppError';
+//import { AppError } from '../errors/AppError';
 
 class ServidorController {
   async create(request: Request, response: Response, next: NextFunction) {
     const {
+      status,
       name,
       mother,
       email,
@@ -19,7 +21,14 @@ class ServidorController {
       administrativeRestrictions,
     } = request.body;
 
+    const errorMessage = validate(cpf, phone);
+
+    if (errorMessage.length) {
+      return response.status(400).json({ message: errorMessage });
+    }
+
     const schema = yup.object().shape({
+      status: yup.string().required(),
       name: yup.string().required(),
       mother: yup.string().required(),
       email: yup.string().email().required(),
@@ -32,16 +41,12 @@ class ServidorController {
       administrativeRestrictions: yup.string().required(),
     });
 
-    // await schema.validate(request.body, { abortEarly: false });
-    // throw new AppError('Erro de validação dos campos!');
-
     try {
       await schema.validate(request.body, { abortEarly: false });
     } catch (err) {
-      //      throw new AppError(err);
       return response
         .status(400)
-        .json({ status: 'Erro de validação dos campos!' });
+        .json({ status: 'Erro de validação dos campos/email!' });
     }
 
     const servidoresRepository = APPDataSource.getRepository(Servidor);
@@ -51,11 +56,12 @@ class ServidorController {
     });
 
     if (servidorAlreadyExists) {
-      throw new AppError('Servidor já existe!');
-      // return response.status(400).json({ status: "Servidor já existe!" });
+      //throw new AppError('Servidor já existe!');
+      return response.status(400).json({ status: 'Servidor já existe!' });
     }
 
     const servidor = servidoresRepository.create({
+      status,
       name,
       mother,
       email,
@@ -93,6 +99,7 @@ class ServidorController {
 
   async update(request: Request, response: Response, next: NextFunction) {
     const {
+      status,
       name,
       mother,
       email,
@@ -106,7 +113,14 @@ class ServidorController {
     } = request.body;
     const { id } = request.params;
 
+    const errorMessage = validate(cpf, phone);
+
+    if (errorMessage.length) {
+      return response.status(400).json({ message: errorMessage });
+    }
+
     const schema = yup.object().shape({
+      status: yup.string().required(),
       name: yup.string().required(),
       mother: yup.string().required(),
       email: yup.string().email().required(),
@@ -135,6 +149,7 @@ class ServidorController {
         id,
       },
       {
+        status,
         name,
         mother,
         email,
@@ -159,8 +174,8 @@ class ServidorController {
     });
 
     if (!servidorToRemove) {
-      throw new AppError('Servidor não encontrado!');
-      //return response.status(400).json({ status: "Servidor não encontrado!" });
+      // throw new AppError('Servidor não encontrado!');
+      return response.status(400).json({ status: 'Servidor não encontrado!' });
     }
 
     await servidoresRepository.remove(servidorToRemove);

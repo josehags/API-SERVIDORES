@@ -14,6 +14,11 @@ export class CreateServidores1656694737087 implements MigrationInterface {
             isPrimary: true, // ID é a chave primária
           },
           {
+            name: 'status',
+            type: 'varchar',
+            isNullable: false, // Não pode ser nulo (Padrão se deixar sem)
+          },
+          {
             name: 'name',
             type: 'varchar',
             isNullable: false, // Não pode ser nulo (Padrão se deixar sem)

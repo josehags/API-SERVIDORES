@@ -12,6 +12,9 @@ export class Servidor {
   @PrimaryColumn()
   readonly id: string; // o readonly para não deixar quem tem informação do id mudar o valor, nesse caso o controller poderá só ler
 
+  @Column()
+  status: string;
+
   @Column() // Poderia passar o nome da coluna: @Column("name"), mas o atributo já está com mesmo nome
   name: string;
 
