@@ -40,7 +40,7 @@ function VerificaCPF(cpf) {
   return true;
 }
 
-const validateCpf = cpf => {
+const validationCPF = cpf => {
   const result = VerificaCPF(cpf);
   return result;
 };
@@ -49,14 +49,23 @@ const validateCpf = cpf => {
 
 const validationPhone = phone => {
   // regex expressão relugar
-  const regex = /^[0-9]{10,11}$/;
-  //^ representa o incio da linha
+  const ReGex = /^[0-9]{10,11}$/;
+  //^ representa o começo da linha
   // [0-9] o número pode ir de 0 a 9
   // eslint-disable-next-line prettier/prettier
   //{10,11} é um quantificador, quantifica um número mínino é um número máximo
   // $ representa o final da linha
-  return regex.test(phone);
+  return ReGex.test(phone);
 };
+
+const validate = (cpf, phone) => {
+  const error = [];
+  if (!validationPhone(phone)) error.push('Informe um telefone valido'); //push() adiciona um ou mais elementos ao final de um array e retorna o novo comprimento desse array.
+  if (!validationCPF(cpf)) error.push('Informe um CPF valido'); //push() adiciona um ou mais elementos ao final de um array e retorna o novo comprimento desse array.
+  return error;
+};
+
+export { validate };
 
 // function validationPhone(phone) {
 //   //retira todos os caracteres menos os numerosi
@@ -70,15 +79,6 @@ const validationPhone = phone => {
 
 //   return true;
 // }
-
-const validate = (cpf, phone) => {
-  const err = [];
-  if (!validateCpf(cpf)) err.push('invalid cpf');
-  if (!validationPhone(phone)) err.push('invalid phone');
-  return err;
-};
-
-export { validate };
 
 // eslint-disable-next-line prettier/prettier
 

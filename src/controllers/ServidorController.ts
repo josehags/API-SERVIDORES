@@ -21,10 +21,10 @@ class ServidorController {
       administrativeRestrictions,
     } = request.body;
 
-    const errorMessage = validate(cpf, phone);
+    const error = validate(cpf, phone);
 
-    if (errorMessage.length) {
-      return response.status(400).json({ message: errorMessage });
+    if (error.length) {
+      return response.status(400).json({ message: error });
     }
 
     const schema = yup.object().shape({
@@ -113,10 +113,10 @@ class ServidorController {
     } = request.body;
     const { id } = request.params;
 
-    const errorMessage = validate(cpf, phone);
+    const error = validate(cpf, phone);
 
-    if (errorMessage.length) {
-      return response.status(400).json({ message: errorMessage });
+    if (error.length) {
+      return response.status(400).json({ message: error });
     }
 
     const schema = yup.object().shape({
