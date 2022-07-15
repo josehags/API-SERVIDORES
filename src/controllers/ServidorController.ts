@@ -29,25 +29,47 @@ class ServidorController {
 
     const schema = yup.object().shape({
       status: yup.string().required(),
-      name: yup.string().required(),
-      mother: yup.string().required(),
-      email: yup.string().email().required(),
+      name: yup.string().required('ERRO! Necessário preencher o campo nome!'),
+      mother: yup.string().required('ERRO! Necessário preencher o campo mãe!'),
+      email: yup
+        .string()
+        .email('ERRO! Necessário preencher o campo com email valido!')
+        .required('ERRO! Necessário preencher o campo email!'),
       phone: yup.string().required(),
       cpf: yup.string().required(),
-      address: yup.string().required(),
-      gender: yup.string().required(),
-      birthdate: yup.string().required(),
-      healthRestrictions: yup.string().required(),
-      administrativeRestrictions: yup.string().required(),
+      address: yup
+        .string()
+        .required('ERRO! Necessário preencher o campo endereço!'),
+      gender: yup.string().required('ERRO! Necessário preencher o campo sexo!'),
+      birthdate: yup
+        .string()
+        .required('ERRO! Necessário preencher o campo data de nascimento!'),
+      healthRestrictions: yup
+        .string()
+        .required('ERRO! Necessário preencher o campo restrições!'),
+      administrativeRestrictions: yup
+        .string()
+        .required(
+          'ERRO! Necessário preencher o campo restrições administrativas!',
+        ),
     });
 
     try {
-      await schema.validate(request.body, { abortEarly: false });
+      await schema.validate(request.body);
     } catch (err) {
-      return response
-        .status(400)
-        .json({ status: 'Erro de validação dos campos/email!' });
+      return response.status(400).json({
+        erro: true,
+        mensagem: err.errors,
+      });
     }
+
+    // try {
+    //   await schema.validate(request.body, { abortEarly: false });
+    // } catch (err) {
+    //   return response
+    //     .status(400)
+    //     .json({ status: 'Erro de validação dos campos/email!' });
+    // }
 
     const servidoresRepository = APPDataSource.getRepository(Servidor);
 
