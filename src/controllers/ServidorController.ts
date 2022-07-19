@@ -3,7 +3,13 @@ import { Servidor } from '../models/Servidor';
 import { validate } from '../Utils/validate';
 import { APPDataSource } from '../database/data-source';
 import * as yup from 'yup';
-//import { AppError } from '../errors/AppError';
+import { ServerPaginate } from '../models/ServerPaginate';
+
+export type SearchParams = {
+  page: number;
+  skip: number;
+  take: number;
+};
 
 class ServidorController {
   async create(request: Request, response: Response, next: NextFunction) {
@@ -100,13 +106,36 @@ class ServidorController {
 
     return response.status(201).json(servidor);
   }
+  // serviço de paginação
+  // async findAll({ page, skip, take }: SearchParams): Promise<ServerPaginate> {
+  //   const servidoresRepository = APPDataSource.getRepository(Servidor);
 
+  //   const [servidores, count] = await servidoresRepository
+  //     .createQueryBuilder()
+  //     .skip(skip)
+  //     .take(take)
+  //     .getManyAndCount();
+
+  //   const result = {
+  //     per_page: take,
+  //     total: count,
+  //     current_page: page,
+  //     data: servidores,
+  //   };
+
+  //   return result;
+  // }
+  // serviço  de listagem dos servidores
   async all(request: Request, response: Response, next: NextFunction) {
-    const servidoresRepository = APPDataSource.getRepository(Servidor);
+    // const servidoresRepository = APPDataSource.getRepository(Servidor);
+    const page = request.query.page ? Number(request.query.page) : 1;
+    const limit = request.query.limit ? Number(request.query.limit) : 4;
 
-    const all = await servidoresRepository.find();
+    const listServers = new listServer();
 
-    return response.json(all);
+    const servers = await listServers.execute({ page, limit });
+
+    return response.json(servers);
   }
 
   async one(request: Request, response: Response, next: NextFunction) {
@@ -205,5 +234,51 @@ class ServidorController {
     return response.json(servidorToRemove);
   }
 }
+// interface da class listServer
+// interface SearchParamsList {
+//   page: number;
+//   limit: number;
+// }
 
-export { ServidorController };
+// export interface ServerRepo {
+//   findAll({ page, skip, take }: SearchParams): Promise<ServerPaginate>;
+// }
+
+// serviço  de listagem dos servidores metodo execute
+class listServer {
+  async execute({ page, limit }): Promise<ServerPaginate> {
+    // const servidoresRepository = APPDataSource.getRepository(Servidor);
+    const take = limit;
+    const skip = (Number(page) - 1) * take;
+
+    const listFind = new paginationSetup();
+
+    const servidores = await listFind.findAll({ page, skip, take });
+
+    return servidores;
+  }
+}
+
+// serviço de configuração de paginação
+class paginationSetup {
+  async findAll({ page, skip, take }: SearchParams): Promise<ServerPaginate> {
+    const servidoresRepository = APPDataSource.getRepository(Servidor);
+
+    const [servidores, count] = await servidoresRepository
+      .createQueryBuilder()
+      .skip(skip)
+      .take(take)
+      .getManyAndCount();
+
+    const result = {
+      per_page: take,
+      total: count,
+      current_page: page,
+      data: servidores,
+    };
+
+    return result;
+  }
+}
+
+export { ServidorController, listServer, paginationSetup };
