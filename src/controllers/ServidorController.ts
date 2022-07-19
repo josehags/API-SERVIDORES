@@ -5,12 +5,6 @@ import { APPDataSource } from '../database/data-source';
 import * as yup from 'yup';
 import { ServerPaginate } from '../models/ServerPaginate';
 
-export type SearchParams = {
-  page: number;
-  skip: number;
-  take: number;
-};
-
 class ServidorController {
   async create(request: Request, response: Response, next: NextFunction) {
     const {
@@ -69,14 +63,6 @@ class ServidorController {
       });
     }
 
-    // try {
-    //   await schema.validate(request.body, { abortEarly: false });
-    // } catch (err) {
-    //   return response
-    //     .status(400)
-    //     .json({ status: 'Erro de validação dos campos/email!' });
-    // }
-
     const servidoresRepository = APPDataSource.getRepository(Servidor);
 
     const servidorAlreadyExists = await servidoresRepository.findOne({
@@ -106,25 +92,7 @@ class ServidorController {
 
     return response.status(201).json(servidor);
   }
-  // serviço de paginação
-  // async findAll({ page, skip, take }: SearchParams): Promise<ServerPaginate> {
-  //   const servidoresRepository = APPDataSource.getRepository(Servidor);
 
-  //   const [servidores, count] = await servidoresRepository
-  //     .createQueryBuilder()
-  //     .skip(skip)
-  //     .take(take)
-  //     .getManyAndCount();
-
-  //   const result = {
-  //     per_page: take,
-  //     total: count,
-  //     current_page: page,
-  //     data: servidores,
-  //   };
-
-  //   return result;
-  // }
   // serviço  de listagem dos servidores
   async all(request: Request, response: Response, next: NextFunction) {
     // const servidoresRepository = APPDataSource.getRepository(Servidor);
@@ -240,26 +208,14 @@ class ServidorController {
 //   limit: number;
 // }
 
-// export interface ServerRepo {
-//   findAll({ page, skip, take }: SearchParams): Promise<ServerPaginate>;
-// }
+// serviço de configuração de PAGINAÇÃO
 
-// serviço  de listagem dos servidores metodo execute
-class listServer {
-  async execute({ page, limit }): Promise<ServerPaginate> {
-    // const servidoresRepository = APPDataSource.getRepository(Servidor);
-    const take = limit;
-    const skip = (Number(page) - 1) * take;
+type SearchParams = {
+  page: number;
+  skip: number;
+  take: number;
+};
 
-    const listFind = new paginationSetup();
-
-    const servidores = await listFind.findAll({ page, skip, take });
-
-    return servidores;
-  }
-}
-
-// serviço de configuração de paginação
 class paginationSetup {
   async findAll({ page, skip, take }: SearchParams): Promise<ServerPaginate> {
     const servidoresRepository = APPDataSource.getRepository(Servidor);
@@ -278,6 +234,20 @@ class paginationSetup {
     };
 
     return result;
+  }
+}
+// serviço  de listagem dos servidores metodo execute
+class listServer {
+  async execute({ page, limit }): Promise<ServerPaginate> {
+    // const servidoresRepository = APPDataSource.getRepository(Servidor);
+    const take = limit;
+    const skip = (Number(page) - 1) * take;
+
+    const listFind = new paginationSetup();
+
+    const servidores = await listFind.findAll({ page, skip, take });
+
+    return servidores;
   }
 }
 
