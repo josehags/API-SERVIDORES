@@ -11,7 +11,7 @@ export interface IServer {
   mother: string;
   email: string;
   cpf: string;
-  phones: string;
+  phone_Number: string[];
   address: string;
   gender: string;
   birthdate: string;

@@ -12,7 +12,7 @@ class ServidorController {
       mother,
       email,
       cpf,
-      phone,
+      phone_Number,
       address,
       gender,
       birthdate,
@@ -20,7 +20,7 @@ class ServidorController {
       administrativeRestrictions,
     } = request.body;
 
-    const error = validate(cpf, phone);
+    const error = validate(cpf, phone_Number);
 
     if (error.length) {
       return response.status(400).json({ message: error });
@@ -34,7 +34,7 @@ class ServidorController {
         .email('ERRO! Necessário preencher o campo com email valido!')
         .required('ERRO! Necessário preencher o campo email!'),
       cpf: yup.string().required(),
-      phone: yup
+      phone_Number: yup
         .string()
         .required('ERRO! Necessário preencher o campo telefone '),
       address: yup
@@ -120,7 +120,7 @@ class ServidorController {
       mother,
       email,
       cpf,
-      phone,
+      phone_Number,
       address,
       gender,
       birthdate,
@@ -129,7 +129,7 @@ class ServidorController {
     } = request.body;
     const { id } = request.params;
 
-    const error = validate(cpf, phone);
+    const error = validate(cpf, phone_Number);
 
     if (error.length) {
       return response.status(400).json({ message: error });
@@ -144,7 +144,7 @@ class ServidorController {
         .required('ERRO! Necessário preencher o campo email!'),
 
       cpf: yup.string().required(),
-      phone: yup
+      phone_Number: yup
         .string()
         .required('ERRO! Necessário preencher o campo telefone '),
       address: yup

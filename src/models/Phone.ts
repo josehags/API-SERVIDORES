@@ -15,7 +15,7 @@ export class Phone {
   readonly id: string;
 
   @Column({ length: 14 })
-  number: string;
+  phone_Number: string;
 
   @ManyToOne(() => Servidor, servidor => servidor.phones)
   servidor: Servidor;
