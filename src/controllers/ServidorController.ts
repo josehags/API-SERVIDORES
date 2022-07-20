@@ -8,12 +8,11 @@ import { ServerPaginate } from '../models/ServerPaginate';
 class ServidorController {
   async create(request: Request, response: Response, next: NextFunction) {
     const {
-      status,
       name,
       mother,
       email,
-      phone,
       cpf,
+      phone,
       address,
       gender,
       birthdate,
@@ -28,15 +27,16 @@ class ServidorController {
     }
 
     const schema = yup.object().shape({
-      status: yup.string().required(),
       name: yup.string().required('ERRO! Necessário preencher o campo nome!'),
       mother: yup.string().required('ERRO! Necessário preencher o campo mãe!'),
       email: yup
         .string()
         .email('ERRO! Necessário preencher o campo com email valido!')
         .required('ERRO! Necessário preencher o campo email!'),
-      phone: yup.string().required(),
       cpf: yup.string().required(),
+      phone: yup
+        .string()
+        .required('ERRO! Necessário preencher o campo telefone '),
       address: yup
         .string()
         .required('ERRO! Necessário preencher o campo endereço!'),
@@ -75,12 +75,11 @@ class ServidorController {
     }
 
     const servidor = servidoresRepository.create({
-      status,
       name,
       mother,
       email,
-      phone,
       cpf,
+      phones: [],
       address,
       gender,
       birthdate,
@@ -93,11 +92,10 @@ class ServidorController {
     return response.status(201).json(servidor);
   }
 
-  // serviço  de listagem dos servidores
+  // metodo all  de listagem dos servidores
   async all(request: Request, response: Response, next: NextFunction) {
-    // const servidoresRepository = APPDataSource.getRepository(Servidor);
     const page = request.query.page ? Number(request.query.page) : 1;
-    const limit = request.query.limit ? Number(request.query.limit) : 4;
+    const limit = request.query.limit ? Number(request.query.limit) : 3;
 
     const listServers = new listServer();
 
@@ -118,12 +116,11 @@ class ServidorController {
 
   async update(request: Request, response: Response, next: NextFunction) {
     const {
-      status,
       name,
       mother,
       email,
-      phone,
       cpf,
+      phone,
       address,
       gender,
       birthdate,
@@ -139,15 +136,17 @@ class ServidorController {
     }
 
     const schema = yup.object().shape({
-      status: yup.string().required(),
       name: yup.string().required('ERRO! Necessário preencher o campo nome!'),
       mother: yup.string().required('ERRO! Necessário preencher o campo mãe!'),
       email: yup
         .string()
         .email('ERRO! Necessário preencher o campo com email valido!')
         .required('ERRO! Necessário preencher o campo email!'),
-      phone: yup.string().required(),
+
       cpf: yup.string().required(),
+      phone: yup
+        .string()
+        .required('ERRO! Necessário preencher o campo telefone '),
       address: yup
         .string()
         .required('ERRO! Necessário preencher o campo endereço!'),
@@ -181,12 +180,11 @@ class ServidorController {
         id,
       },
       {
-        status,
         name,
         mother,
         email,
-        phone,
         cpf,
+        phones: [],
         address,
         gender,
         birthdate,
@@ -215,11 +213,6 @@ class ServidorController {
     return response.json(servidorToRemove);
   }
 }
-// interface da class listServer
-// interface SearchParamsList {
-//   page: number;
-//   limit: number;
-// }
 
 // serviço de configuração de PAGINAÇÃO
 
@@ -252,7 +245,6 @@ class paginationSetup {
 // serviço  de listagem dos servidores metodo execute
 class listServer {
   async execute({ page, limit }): Promise<ServerPaginate> {
-    // const servidoresRepository = APPDataSource.getRepository(Servidor);
     const take = limit;
     const skip = (Number(page) - 1) * take;
 

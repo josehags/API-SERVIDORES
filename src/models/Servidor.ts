@@ -2,18 +2,17 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  PrimaryColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { v4 as uuid } from 'uuid'; // Importando o uuid v4 e renomeando pra uuid
+import { Phone } from './Phone';
 
 @Entity('servidores') // Do TypeORM, pois será uma entidade do banco de dados, utilizada no controller
 export class Servidor {
-  @PrimaryColumn()
-  readonly id: string; // o readonly para não deixar quem tem informação do id mudar o valor, nesse caso o controller poderá só ler
-
-  @Column()
-  status: string;
+  @PrimaryGeneratedColumn('uuid')
+  id: string; // o readonly para não deixar quem tem informação do id mudar o valor, nesse caso o controller poderá só ler
 
   @Column() // Poderia passar o nome da coluna: @Column("name"), mas o atributo já está com mesmo nome
   name: string;
@@ -25,10 +24,10 @@ export class Servidor {
   email: string;
 
   @Column({ length: 14 })
-  phone: string;
-
-  @Column({ length: 14 })
   cpf: string;
+
+  @OneToMany(() => Phone, photo => photo.servidor)
+  phones: Phone[];
 
   @Column()
   address: string;

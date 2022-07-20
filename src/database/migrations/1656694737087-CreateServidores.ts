@@ -34,11 +34,6 @@ export class CreateServidores1656694737087 implements MigrationInterface {
             isNullable: false, // Não pode ser nulo (Padrão se deixar sem)
           },
           {
-            name: 'phone',
-            type: 'varchar ',
-            isNullable: false, // Não pode ser nulo (Padrão se deixar sem)
-          },
-          {
             name: 'cpf',
             type: 'varchar ',
             isNullable: false, // Não pode ser nulo (Padrão se deixar sem)

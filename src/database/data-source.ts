@@ -1,7 +1,9 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
+import { Phone } from '../models/Phone';
 import { Servidor } from '../models/Servidor';
 import { CreateServidores1656694737087 } from './migrations/1656694737087-CreateServidores';
+import { CreatePhone1658326843536 } from './migrations/1658326843536-CreatePhone';
 
 export const APPDataSource = new DataSource({
   type: 'postgres',
@@ -12,7 +14,7 @@ export const APPDataSource = new DataSource({
   database: 'api_database',
   synchronize: true,
   logging: false,
-  entities: [Servidor],
-  migrations: [CreateServidores1656694737087],
+  entities: [Servidor, Phone],
+  migrations: [CreateServidores1656694737087, CreatePhone1658326843536],
   subscribers: [],
 });

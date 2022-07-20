@@ -1,7 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { pagination } from 'typeorm-pagination';
 import { router } from './routes/routes';
 import { AppError } from './errors/AppError';
 
@@ -18,7 +17,6 @@ const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use(pagination);
 app.use(router);
 
 app.use(
