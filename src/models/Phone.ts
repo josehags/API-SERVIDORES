@@ -1,4 +1,11 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import { Servidor } from './Servidor';
 
@@ -12,6 +19,15 @@ export class Phone {
 
   @ManyToOne(() => Servidor, servidor => servidor.phones)
   servidor: Servidor;
+
+  @Column({ default: false })
+  isDeleted: boolean;
+
+  @CreateDateColumn() // Para já capturar a data e fazer a formatação
+  created_at: Date;
+
+  @UpdateDateColumn() // Para já capturar a data e fazer a formatação
+  update_at: Date;
 
   /*
       A geração do uuID automático não será por meio do SGBD, e sim aqui pelo código
