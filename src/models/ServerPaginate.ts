@@ -5,7 +5,7 @@ export interface ServerPaginate {
   data: IServer[];
 }
 
-export interface Phones {
+export interface IPhones {
   id: string;
   phone_Number: string;
 }
@@ -16,6 +16,7 @@ export interface IServer {
   mother: string;
   email: string;
   cpf: string;
+  phones: IPhones[];
   address: string;
   gender: string;
   birthdate: string;

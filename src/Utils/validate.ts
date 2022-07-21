@@ -1,5 +1,3 @@
-import { Phone } from '../models/Phone';
-
 function VerificaCPF(cpf) {
   let soma = 0;
   let resto;
@@ -47,15 +45,9 @@ const validationCPF = cpf => {
   return result;
 };
 
-const validateCpf = cpf => {
-  const error = [];
-  if (!validationCPF(cpf)) error.push('Informe um CPF valido'); //push() adiciona um ou mais elementos ao final de um array e retorna o novo comprimento desse array.
-  return error;
-};
-
 //   VALIDAÇÃO DE TELEFONE
 
-const validationPhone = phone_Number => {
+const validationPhone = phone => {
   //   // regex expressão relugar
   const ReGex = /^[0-9]{10,11}$/;
   //   //^ representa o começo da linha
@@ -63,14 +55,14 @@ const validationPhone = phone_Number => {
   //   // eslint-disable-next-line prettier/prettier
   //   //{10,11} é um quantificador, quantifica um número mínino é um número máximo
   //   // $ representa o final da linha
-  return ReGex.test(phone_Number);
+  return ReGex.test(phone);
 };
 
-const validatePhone = phone_Number => {
-  const errorPhone = [];
-  if (!validationPhone(phone_Number))
-    errorPhone.push('Informe um telefone valido'); //push() adiciona um ou mais elementos ao final de um array e retorna o novo comprimento desse array.
-
-  return errorPhone;
+const validate = (cpf, phone) => {
+  const error = [];
+  if (!validationCPF(cpf)) error.push('Informe um CPF valido'); //push() adiciona um ou mais elementos ao final de um array e retorna o novo comprimento desse array.
+  //if (!validationPhone(phone)) error.push('Informe um telefone valido');
+  return error;
 };
-export { validateCpf, validatePhone };
+
+export { validate };
