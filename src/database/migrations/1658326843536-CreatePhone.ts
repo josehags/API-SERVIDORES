@@ -18,16 +18,6 @@ export class CreatePhone1658326843536 implements MigrationInterface {
             type: 'varchar',
             isNullable: false, // Não pode ser nulo (Padrão se deixar sem)
           },
-          {
-            name: 'created_at',
-            type: 'timestamp',
-            default: 'now()', // Banco de dados captura data e tempo do momento
-          },
-          {
-            name: 'update_at',
-            type: 'timestamp',
-            default: 'now()', // Banco de dados captura data e tempo do momento
-          },
         ],
       }),
     );

@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 import { Servidor } from '../models/Servidor';
-import { validate } from '../Utils/validate';
+import { validateCpf } from '../Utils/validate';
 import { APPDataSource } from '../database/data-source';
 import * as yup from 'yup';
 import { ServerPaginate } from '../models/ServerPaginate';
+import { Phone } from '../models/Phone';
 
 class ServidorController {
   async create(request: Request, response: Response, next: NextFunction) {
@@ -12,7 +13,6 @@ class ServidorController {
       mother,
       email,
       cpf,
-      phone_Number,
       address,
       gender,
       birthdate,
@@ -20,7 +20,7 @@ class ServidorController {
       administrativeRestrictions,
     } = request.body;
 
-    const error = validate(cpf, phone_Number);
+    const error = validateCpf(cpf);
 
     if (error.length) {
       return response.status(400).json({ message: error });
@@ -34,9 +34,6 @@ class ServidorController {
         .email('ERRO! Necessário preencher o campo com email valido!')
         .required('ERRO! Necessário preencher o campo email!'),
       cpf: yup.string().required(),
-      phone_Number: yup
-        .string()
-        .required('ERRO! Necessário preencher o campo telefone '),
       address: yup
         .string()
         .required('ERRO! Necessário preencher o campo endereço!'),
@@ -79,7 +76,6 @@ class ServidorController {
       mother,
       email,
       cpf,
-      phones: [],
       address,
       gender,
       birthdate,
@@ -120,7 +116,6 @@ class ServidorController {
       mother,
       email,
       cpf,
-      phone_Number,
       address,
       gender,
       birthdate,
@@ -129,7 +124,7 @@ class ServidorController {
     } = request.body;
     const { id } = request.params;
 
-    const error = validate(cpf, phone_Number);
+    const error = validateCpf(cpf);
 
     if (error.length) {
       return response.status(400).json({ message: error });
@@ -144,9 +139,6 @@ class ServidorController {
         .required('ERRO! Necessário preencher o campo email!'),
 
       cpf: yup.string().required(),
-      phone_Number: yup
-        .string()
-        .required('ERRO! Necessário preencher o campo telefone '),
       address: yup
         .string()
         .required('ERRO! Necessário preencher o campo endereço!'),
@@ -184,7 +176,6 @@ class ServidorController {
         mother,
         email,
         cpf,
-        phones: [],
         address,
         gender,
         birthdate,
@@ -237,6 +228,7 @@ class paginationSetup {
       total: count,
       current_page: page,
       data: servidores,
+      phone: typeof Phone,
     };
 
     return result;
