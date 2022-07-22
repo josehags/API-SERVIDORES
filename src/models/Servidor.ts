@@ -26,7 +26,7 @@ export class Servidor {
   @Column({ length: 14 })
   cpf: string;
 
-  @OneToMany(() => Phone, photo => photo.servidor)
+  @OneToMany(() => Phone, phone => phone.servidor)
   phones: Phone[];
 
   @Column()

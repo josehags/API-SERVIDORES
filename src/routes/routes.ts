@@ -13,6 +13,7 @@ const servidorController = new ServidorController();
 */
 
 router.post('/servidores', servidorController.create);
+router.post('/servidores/phones', servidorController.createPhone);
 router.get('/servidores', servidorController.all);
 router.get('/servidores/:id', servidorController.one);
 router.put('/servidores/:id', servidorController.update);

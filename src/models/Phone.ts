@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -17,7 +18,7 @@ export class Phone {
   @Column({ length: 14 })
   phone_Number: string;
 
-  @ManyToOne(() => Servidor, servidor => servidor.phones)
+  @ManyToOne(() => Servidor, servidor => servidor.phones, { eager: true })
   servidor: Servidor;
 
   @Column({ default: false })

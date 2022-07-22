@@ -4,6 +4,7 @@ import { validate } from '../Utils/validate';
 import { APPDataSource } from '../database/data-source';
 import * as yup from 'yup';
 import { ServerPaginate } from '../models/ServerPaginate';
+import { Phone } from '../models/Phone';
 
 class ServidorController {
   async create(request: Request, response: Response, next: NextFunction) {
@@ -12,7 +13,6 @@ class ServidorController {
       mother,
       email,
       cpf,
-      phone,
       address,
       gender,
       birthdate,
@@ -20,11 +20,11 @@ class ServidorController {
       administrativeRestrictions,
     } = request.body;
 
-    const error = validate(cpf, phone);
+    // const error = validate(cpf);
 
-    if (error.length) {
-      return response.status(400).json({ message: error });
-    }
+    // if (error.length) {
+    //   return response.status(400).json({ message: error });
+    // }
 
     const schema = yup.object().shape({
       name: yup.string().required('ERRO! Necessário preencher o campo nome!'),
@@ -34,9 +34,6 @@ class ServidorController {
         .email('ERRO! Necessário preencher o campo com email valido!')
         .required('ERRO! Necessário preencher o campo email!'),
       cpf: yup.string().required(),
-      phone: yup
-        .string()
-        .required('ERRO! Necessário preencher o campo telefone!'),
       address: yup
         .string()
         .required('ERRO! Necessário preencher o campo endereço!'),
@@ -79,7 +76,6 @@ class ServidorController {
       mother,
       email,
       cpf,
-      phones: [],
       address,
       gender,
       birthdate,
@@ -90,6 +86,48 @@ class ServidorController {
     await servidoresRepository.save(servidor);
 
     return response.status(201).json(servidor);
+  }
+
+  async createPhone(request: Request, response: Response, next: NextFunction) {
+    const { phone_Number } = request.body;
+
+    // const error = validate(cpf, phone_Number);
+
+    // if (error.length) {
+    //   return response.status(400).json({ message: error });
+    // }
+    const schema = yup.object().shape({
+      phone_Number: yup
+        .string()
+        .required('ERRO! Necessário preencher o campo telefone!'),
+    });
+
+    try {
+      await schema.validate(request.body);
+    } catch (err) {
+      return response.status(400).json({
+        erro: true,
+        mensagem: err.errors,
+      });
+    }
+
+    const phoneRepository = APPDataSource.getRepository(Phone);
+
+    const phoneAlreadyExists = await phoneRepository.findOne({
+      where: { phone_Number: phone_Number },
+    });
+
+    if (phoneAlreadyExists) {
+      return response
+        .status(400)
+        .json({ status: 'Este telefone já esta cadastrado!' });
+    }
+
+    const serverPhones = phoneRepository.create({ phone_Number });
+
+    await phoneRepository.save(serverPhones);
+
+    return response.status(201).json(serverPhones);
   }
 
   // metodo all  de listagem dos servidores
@@ -144,9 +182,6 @@ class ServidorController {
         .required('ERRO! Necessário preencher o campo email!'),
 
       cpf: yup.string().required(),
-      phone: yup
-        .string()
-        .required('ERRO! Necessário preencher o campo telefone!'),
       address: yup
         .string()
         .required('ERRO! Necessário preencher o campo endereço!'),
