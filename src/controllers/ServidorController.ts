@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Request, Response, request } from 'express';
 import { Servidor } from '../models/Servidor';
 import { validate } from '../Utils/validate';
 import { APPDataSource } from '../database/data-source';
@@ -205,6 +205,10 @@ class ServidorController {
     return response.json(servidorToRemove);
   }
 
+  // Serviço para criar telefone
+
+  //
+  //
   async createPhone(request: Request, response: Response, next: NextFunction) {
     const { phone_Number } = request.body;
 
@@ -246,15 +250,22 @@ class ServidorController {
 
     return response.status(201).json(serverPhones);
   }
+  // serviço para listar telefone - falhas
 
-  async phoneBook(request: Request, response: Response, next: NextFunction) {
+  //
+  async phoneBook(
+    request: Request,
+    response: Response,
+  ): Promise<Phone[] | undefined> {
     const phoneRepository = APPDataSource.getRepository(Phone);
 
     const phones = await phoneRepository.find();
 
-    return response.json(phones);
+    return phones;
   }
 }
+
+//
 // serviço de configuração de PAGINAÇÃO
 
 type SearchParams = {
