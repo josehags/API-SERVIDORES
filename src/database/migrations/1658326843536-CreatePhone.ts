@@ -14,7 +14,7 @@ export class CreatePhone1658326843536 implements MigrationInterface {
             isPrimary: true, // ID é a chave primária
           },
           {
-            name: 'phone number',
+            name: 'phone_number',
             type: 'varchar',
             isNullable: false, // Não pode ser nulo (Padrão se deixar sem)
           },
